@@ -5,7 +5,9 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/stdcopy"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -59,7 +61,7 @@ func main() {
 			panic(e)
 		}
 	}()
-	_, e := io.Copy(os.Stdout, hijack.Reader)
+	_, e := stdcopy.StdCopy(os.Stdout, ioutil.Discard, hijack.Reader)
 	if e != nil {
 		fmt.Printf("wtf %#v\n", e)
 		panic(err)
