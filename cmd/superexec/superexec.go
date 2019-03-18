@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/container"
-	"github.com/docker/docker/client"
-	"github.com/docker/docker/pkg/stdcopy"
 	"io"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/stdcopy"
 
 	"golang.org/x/net/context"
 )
@@ -29,13 +30,13 @@ func main() {
 	resp, err := cli.ContainerCreate(ctx, &container.Config{
 		Image:        "gcr.io/cf-london-servces-k8s/windows-images/socat:latest",
 		Cmd:          []string{"/wincat.exe", "80"},
-		OpenStdin: true,
+		OpenStdin:    true,
 		AttachStdout: true,
-		AttachStdin: true,
+		AttachStdin:  true,
 		//Tty: true,
 
 	}, &container.HostConfig{
-		NetworkMode: container.NetworkMode("container:"+containerID),
+		NetworkMode: container.NetworkMode("container:" + containerID),
 	}, nil, "")
 	if err != nil {
 		panic(err)
@@ -45,9 +46,8 @@ func main() {
 		panic(err)
 	}
 
-
 	hijack, err := cli.ContainerAttach(ctx, resp.ID, types.ContainerAttachOptions{
-		Stdin: true,
+		Stdin:  true,
 		Stdout: true,
 		Stream: true,
 	})
